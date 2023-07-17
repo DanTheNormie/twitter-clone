@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000
 /* session config */
 
 const sessionOptions = {
-    
+    secret:''
 }
 
 /* Passport Config */
