@@ -10,7 +10,6 @@ exports.login = async(req,res)=>{
                 statusCode:401,
                 success:false,
                 data:null,
-                err:err,
                 msg:"No Such User"
                 
             });
@@ -42,6 +41,7 @@ exports.login = async(req,res)=>{
         }
 
     }catch(err){
+        console.log(err);
         res.status(401).json({
             statusCode:401,
             success:false,

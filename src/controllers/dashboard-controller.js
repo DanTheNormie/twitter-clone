@@ -39,7 +39,8 @@ async function createTweet(req,res){
         })
         
         const article = await newArticle.save()
-
+        const user = await User.findByIdAndUpdate(_id,{$push:{articles:article._id}})
+        console.log(user);
         res.json({
             success:true,
             statusCode:200,
