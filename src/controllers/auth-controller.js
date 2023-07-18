@@ -6,19 +6,50 @@ exports.login = async(req,res)=>{
     try{
         const user = await User.findOne({email})
         if(!user){
-            res.status(401).json({success: false, msg: 'could not find user'});
+            res.status(401).json({
+                statusCode:401,
+                success:false,
+                data:null,
+                err:err,
+                msg:"No Such User"
+                
+            });
         }
         const isValid = await user.comparePassword(password)
 
         if(isValid){
             const tokenObj = utils.issueJWT(user._id)
-            res.status(200).json({success:true, user:user, token: tokenObj.token, expires: tokenObj.expires})
+            res.status(200).json({
+                statusCode:200,
+                success:true,
+                data:{
+                    user:user, 
+                    token: tokenObj.token, 
+                    expires: tokenObj.expires
+                },
+                msg:'User Logged In Successfully'
+                
+            })
         }else{
-            res.status(401).json({success:false, msg: "you entered the wrong password"})
+            res.status(401).json({
+                statusCode:401,
+                success:false,
+                data:null,
+                err:err,
+                msg:"you entered the wrong password"
+                
+            })
         }
 
     }catch(err){
-        console.log(err);
+        res.status(401).json({
+            statusCode:401,
+            success:false,
+            data:null,
+            err:err,
+            msg:"User Login Failed Successfully"
+            
+        })
     }
 }
 
@@ -33,8 +64,24 @@ exports.register = async(req,res)=>{
     try{
         const savedUser = await newUser.save()
         const jwt = utils.issueJWT(savedUser.id)
-        res.json({success:true, user:savedUser, token: jwt.token, expiresIn: jwt.expires})
+        res.status(200).json({
+            statusCode:200,
+            success:true, 
+            data:{
+                user:savedUser, 
+                token: jwt.token, 
+                expiresIn: jwt.expires
+            },
+            msg:"User Registered successfully"
+        })
     }catch(err){
         console.log(err);
+        res.status(200).json({
+            statusCode:200,
+            success:false, 
+            data:null,
+            err:err,
+            msg:"User Already Exists"   
+        })
     }
 }

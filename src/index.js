@@ -4,18 +4,35 @@ const app = express()
 const passport = require('passport')
 require('dotenv').config()
 const session = require('express-session')
+const ejsMate = require('ejs-mate')
+const path = require('path')
+const cors = require('cors')
 
 /* Environment Config */
 const PORT = process.env.PORT || 3000
 
-/* session config */
+/* view/render engine config */
+app.set('view engine','ejs')
+app.engine('ejs',ejsMate)
+app.set('views', path.join(__dirname,'views'))
+app.use(express.static(path.join(__dirname,'public')))
 
+/* CORS config */
+app.use(cors())
+
+/* Session Config */
 const sessionOptions = {
-    secret:''
+    secret: process.env.SessionSecret || 'Today is a good day',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
 }
+
+//app.use(session(sessionOptions))
 
 /* Passport Config */
 app.use(passport.initialize())
+//app.use(passport.session(session))
 require('./config/passport')(passport)
 
 /* DB config */

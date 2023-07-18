@@ -6,13 +6,22 @@ const articleSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    content:{
+    desc:{
         type:String,
         required:true
     },
     author:{
         type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
         required:true
+    },
+    createdAt:{
+        type:mongoose.Schema.Types.Date,
+        required:true
+    },
+    likes:{
+        count:Number,
+        users:[{user:{type:mongoose.Schema.Types.ObjectId,ref:'User'}}]
     }
 })
 

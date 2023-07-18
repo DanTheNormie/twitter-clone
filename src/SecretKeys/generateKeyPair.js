@@ -16,8 +16,8 @@ function genKeyPair(){
     })
     console.log(keyPair);
 
-    fs.writeFileSync(__dirname + '/id_rsa_pub.pem', keyPair.publicKey);
-    fs.writeFileSync(__dirname + '/id_rsa_priv.pem', keyPair.privateKey);
+    fs.writeFile(__dirname + '/id_rsa_pub.pem', keyPair.publicKey);
+    fs.writeFile(__dirname + '/id_rsa_priv.pem', keyPair.privateKey);
 }
 
 genKeyPair();

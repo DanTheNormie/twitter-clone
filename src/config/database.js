@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config()
 
-const db_url = process.env.PROD ? process.env.DB_URL_PROD : process.env.DB_URL;
+const db_url = (process.env.PROD == true) ? process.env.DB_URL_PROD : process.env.DB_URL
 
 function connect_db(){
     mongoose.connect(db_url,{useNewUrlParser: true, useUnifiedTopology: true})
