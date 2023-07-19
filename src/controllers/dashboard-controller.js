@@ -3,7 +3,7 @@ const User = require('../models/user')
 
 async function getAllTweets(req,res){
     try{
-        const articles = await Article.find().populate('author')
+        const articles = await Article.find().populate('author').sort({createdAt: 'desc'})
     
         res.status(200).json({
             success:true,
@@ -26,6 +26,8 @@ async function getAllTweets(req,res){
 async function createTweet(req,res){
     try{
         const {title,desc,_id} = req.body;
+
+        console.log(req.body);
         
         const newArticle = Article({
             title,
@@ -128,7 +130,7 @@ async function updateUserDetails(req,res){
 async function getUserTweets(req,res){
     try{
         console.log(req.params.user_id);
-        const articles = await Article.find({author:req.params['user_id']}).populate('author')
+        const articles = await Article.find({author:req.params['user_id']}).populate('author').sort({createdAt: 'desc'})
         if(!articles){
             res.json({
                 success:false,
