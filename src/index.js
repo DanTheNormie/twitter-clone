@@ -7,6 +7,25 @@ const session = require('express-session')
 const ejsMate = require('ejs-mate')
 const path = require('path')
 const cors = require('cors')
+const fs = require('fs')
+const Log = require('./models/log')
+
+
+
+app.use(async (req,res,next)=>{
+
+    const newLog = new Log({
+        cat:new Date(),
+        method:req.method,
+        url:req.path,
+        ip:req.ip  
+    })
+    next()
+    const log = await newLog.save()
+
+    console.log(log);
+    
+})
 
 /* Environment Config */
 const PORT = process.env.PORT || 3000
@@ -27,6 +46,8 @@ const sessionOptions = {
     saveUninitialized: true,
     cookie: { secure: true }
 }
+
+
 
 //app.use(session(sessionOptions))
 
