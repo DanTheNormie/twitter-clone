@@ -20,11 +20,8 @@ app.use(async (req,res,next)=>{
         url:req.path,
         ip:req.ip  
     })
+    newLog.save().then(()=>{console.log("log saved successfully");})
     next()
-    const log = await newLog.save()
-
-    console.log(log);
-    
 })
 
 /* Environment Config */
