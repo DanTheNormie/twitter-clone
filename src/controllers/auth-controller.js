@@ -6,8 +6,8 @@ exports.login = async(req,res)=>{
     try{
         const user = await User.findOne({email})
         if(!user){
-            res.status(401).json({
-                statusCode:401,
+            return res.status(200).json({
+                statusCode:200,
                 success:false,
                 data:null,
                 msg:"No Such User"
@@ -30,23 +30,22 @@ exports.login = async(req,res)=>{
                 
             })
         }else{
-            res.status(401).json({
-                statusCode:401,
+            res.status(200).json({
+                statusCode:200,
                 success:false,
                 data:null,
-                err:err,
-                msg:"you entered the wrong password"
+                msg:"Email (or) Password Incorrect" 
                 
             })
         }
 
     }catch(err){
         console.log(err);
-        res.status(401).json({
-            statusCode:401,
+        res.status(500).json({
+            statusCode:500,
             success:false,
             data:null,
-            err:err,
+            err:err.message,
             msg:"User Login Failed Successfully"
             
         })

@@ -17,11 +17,15 @@ const articleSchema = new mongoose.Schema({
     },
     createdAt:{
         type:mongoose.Schema.Types.Date,
-        required:true
+        required:true,
+       
     },
     likes:{
-        count:Number,
-        users:[{user:{type:mongoose.Schema.Types.ObjectId,ref:'User'}}]
+        type:Number,
+        default:0
+    },
+    likedBy:{
+        type : [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
     }
 })
 

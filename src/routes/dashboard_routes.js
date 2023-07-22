@@ -14,4 +14,6 @@ router.get('/users/:user_id/tweets',dashboard_controller.getUserTweets)
 
 router.patch('/users/:user_id',dashboard_controller.updateUserDetails)
 
+router.patch('/tweet/like',dashboard_controller.likeDislikeTweet)
+
 module.exports = router;

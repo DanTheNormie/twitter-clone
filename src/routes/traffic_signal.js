@@ -2,8 +2,21 @@ const router = require('express').Router();
 const passport = require('passport');
 const authenticate = require('./custom_authenticate')
 const _ = require('lodash')
+const Log = require('../models/log')
 
 router.use('/live',(req,res)=>{res.sendStatus(200)})
+
+router.use(async (req,res,next)=>{
+
+  const newLog = new Log({
+      cat:new Date(),
+      method:req.method,
+      url:req.path,
+      ip:req.ip  
+  })
+  newLog.save().then(()=>{console.log("log saved successfully",newLog);})
+  next()
+})
 
 router.use('/auth',require('./auth_routes'))
 
