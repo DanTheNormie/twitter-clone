@@ -16,4 +16,8 @@ router.patch('/users/:user_id',dashboard_controller.updateUserDetails)
 
 router.patch('/tweet/like',dashboard_controller.likeDislikeTweet)
 
+router.post('/getTweetComments',dashboard_controller.getTweetComments)
+
+router.post('/addComment',dashboard_controller.addComment)
+
 module.exports = router;

@@ -26,6 +26,12 @@ const articleSchema = new mongoose.Schema({
     },
     likedBy:{
         type : [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    },
+    comments:{
+        type:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Comment'
+        }]
     }
 })
 

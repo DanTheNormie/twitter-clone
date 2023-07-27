@@ -1,5 +1,7 @@
 const Article = require('../models/article')
 const User = require('../models/user')
+const Comment = require('../models/comment')
+
 
 async function getAllTweets(req,res){
     try{
@@ -38,7 +40,7 @@ async function createTweet(req,res){
 
         console.log(req.body);
         
-        const newArticle = Article({
+        const newArticle = new Article({
             title,
             desc,
             author:_id,
@@ -145,7 +147,7 @@ async function getUserTweets(req,res){
             })
         }else{
             res.json({
-                success:false,
+                success:true,
                 statusCode:200,
                 data:articles,
                 msg:'Request Successful'
@@ -206,7 +208,93 @@ async function likeDislikeTweet(req,res){
   }
 }
 
+async function getTweetComments(req,res){
+    const {article_id} = req.body
+
+    try{
+        const comments = await Comment
+        .find({article : article_id})
+        .select('createdAt text')
+        .populate('by','username _id')
+
+
+        if(!comments){
+            return res.json({
+                statusCode:401,
+                success:false,
+                data:null,
+                msg:'No such article'
+            })
+        }
+        res.json({
+            statusCode:200,
+            success:true,
+            data:comments,
+            msg: (comments.length>0) ? 'Comments fetched successfully' : 'No comments yet for this tweet'
+        })
+
+    }catch(err){
+        console.log(err);
+        res.json({
+            success:false,
+            statusCode:500,
+            data:null,
+            err:err,
+            msg:'Request Failed, Please try again later.'
+        })
+    }
+}
+
+async function addComment(req,res){
+    const {article_id,comment_text, by} = req.body
+
+    try{
+        const saved_comment = await new Comment({
+            text:comment_text,
+            createdAt:Date.now(),
+            by:by,
+            article:article_id
+        }).save()
+    
+        const article = await Article.findByIdAndUpdate(article_id,{$push:{comments:saved_comment._id}})
+        
+        if(!article_id){
+
+            res.json({
+                statusCode:401,
+                success:false,
+                data:null,
+                msg:'No such article'
+            })
+        }else{
+            res.json({
+                success:true,
+                statusCode:false,
+                data:saved_comment,
+                msg:'Comment saved successfully.'
+            })
+        }
+
+    }catch(err){
+        console.log(err);
+
+        res.json({
+            statusCode:500,
+            success:false,
+            err:err,
+            msg:'Request Failed successfully'
+        })
+    }
+}
+
 module.exports = {
-    getAllTweets,createTweet,getUserDetails,updateUserDetails,getUserTweets,likeDislikeTweet
+    getAllTweets,
+    createTweet,
+    getUserDetails,
+    updateUserDetails,
+    getUserTweets,
+    likeDislikeTweet,
+    getTweetComments,
+    addComment
 }
 
